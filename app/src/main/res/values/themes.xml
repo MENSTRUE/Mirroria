@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Mirrora" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#F8FAFD</item>
+        <item name="android:statusBarColor">#F8FAFD</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
