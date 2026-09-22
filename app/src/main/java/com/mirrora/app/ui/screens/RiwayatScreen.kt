@@ -2,7 +2,9 @@ package com.mirrora.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,9 +30,17 @@ fun RiwayatScreen(
     onResultClick: (String) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
+
     val filtered = remember(results, query) {
-        if (query.isBlank()) results
-        else results.filter { it.date.contains(query, ignoreCase = true) }
+        if (query.isBlank()) {
+            results
+        } else {
+            results.filter {
+                it.date.contains(query, ignoreCase = true) ||
+                    it.time.contains(query, ignoreCase = true) ||
+                    it.symmetryPercent.toString().contains(query)
+            }
+        }
     }
 
     Column(
@@ -39,19 +49,39 @@ fun RiwayatScreen(
             .background(MirroraBackground)
             .padding(horizontal = 24.dp)
     ) {
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+
         Text(
             text = "Riwayat",
             style = MaterialTheme.typography.titleLarge,
             color = MirroraTextPrimary
         )
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 16.dp))
-        SearchField(value = query, onValueChange = { query = it })
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 8.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        SearchField(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = "Cari riwayat analisis"
+        )
+
+        Spacer(modifier = Modifier.height(14.dp))
+
+        Text(
+            text = "${filtered.size} hasil",
+            style = MaterialTheme.typography.bodySmall,
+            color = MirroraTextSecondary
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         if (filtered.isEmpty()) {
             Text(
-                text = "Belum ada riwayat analisis.",
+                text = if (results.isEmpty()) {
+                    "Belum ada riwayat analisis."
+                } else {
+                    "Tidak ada hasil yang cocok."
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MirroraTextSecondary,
                 modifier = Modifier.padding(vertical = 24.dp)
@@ -63,6 +93,10 @@ fun RiwayatScreen(
                         result = result,
                         onClick = { onResultClick(result.id) }
                     )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

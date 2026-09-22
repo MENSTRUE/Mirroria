@@ -3,10 +3,13 @@ package com.mirrora.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
@@ -16,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,18 +38,41 @@ fun MirroraHeader(
         Box(
             modifier = Modifier
                 .size(28.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(MirroraPrimaryBlue)
-        )
+                .clip(CircleShape)
+        ) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(MirroraPrimaryBlue)
+                )
+                Box(
+                    modifier = Modifier
+                        .width(1.dp)
+                        .fillMaxHeight()
+                        .background(Color.White.copy(alpha = 0.9f))
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(MirroraTextSecondary.copy(alpha = 0.42f))
+                )
+            }
+        }
+
         Text(
-            text = "  MIRRORA",
+            text = "MIRRORA",
             color = MirroraTextPrimary,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp,
-            letterSpacing = 1.sp,
-            modifier = Modifier.padding(start = 8.dp)
+            fontSize = 15.sp,
+            letterSpacing = 3.sp,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 12.dp)
         )
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.weight(1f))
+
         if (onSettingsClick != null) {
             IconButton(onClick = onSettingsClick) {
                 Icon(

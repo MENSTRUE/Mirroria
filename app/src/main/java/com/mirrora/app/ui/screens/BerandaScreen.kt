@@ -2,7 +2,9 @@ package com.mirrora.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +27,8 @@ fun BerandaScreen(
     recentResults: List<AnalysisResult>,
     onStartScan: () -> Unit,
     onSeeAllHistory: () -> Unit,
-    onResultClick: (String) -> Unit
+    onResultClick: (String) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,32 +37,34 @@ fun BerandaScreen(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp)
     ) {
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 16.dp))
-        MirroraHeader()
+        Spacer(modifier = Modifier.height(12.dp))
+        MirroraHeader(onSettingsClick = onSettingsClick)
 
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 32.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         Text(
             text = "Lihat wajahmu\ndari sisi yang berbeda.",
             style = MaterialTheme.typography.titleLarge,
             color = MirroraTextPrimary
         )
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 8.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Visualisasikan keseimbangan wajahmu secara sederhana.",
             style = MaterialTheme.typography.bodyMedium,
             color = MirroraTextSecondary
         )
 
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         PrimaryAnalysisCard(onClick = onStartScan)
 
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 32.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         SectionHeader(
             title = "Analisis terbaru",
             actionLabel = if (recentResults.isNotEmpty()) "Lihat semua" else null,
             onActionClick = if (recentResults.isNotEmpty()) onSeeAllHistory else null
         )
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 4.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         if (recentResults.isEmpty()) {
             Text(
@@ -77,6 +82,6 @@ fun BerandaScreen(
             }
         }
 
-        androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }

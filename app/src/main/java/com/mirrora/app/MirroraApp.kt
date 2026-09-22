@@ -59,9 +59,15 @@ fun MirroraApp() {
                     onSeeAllHistory = { navController.navigate(MirroraDestinations.RIWAYAT) },
                     onResultClick = { id ->
                         navController.navigate(MirroraDestinations.hasilRoute(id))
+                    },
+                    onSettingsClick = {
+                        navController.navigate(MirroraDestinations.PROFIL) {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
+
             composable(MirroraDestinations.SCAN) {
                 ScanScreen(
                     onClose = { navController.popBackStack() },
@@ -73,6 +79,7 @@ fun MirroraApp() {
                     }
                 )
             }
+
             composable(MirroraDestinations.HASIL_ROUTE) { backStackEntry ->
                 val resultId = backStackEntry.arguments?.getString("resultId")
                 val result = resultId?.let { viewModel.getById(it) }
@@ -83,6 +90,7 @@ fun MirroraApp() {
                     )
                 }
             }
+
             composable(MirroraDestinations.RIWAYAT) {
                 RiwayatScreen(
                     results = results,
@@ -91,6 +99,7 @@ fun MirroraApp() {
                     }
                 )
             }
+
             composable(MirroraDestinations.PROFIL) {
                 ProfilScreen(
                     onDeleteHistory = { viewModel.deleteAllHistory() }

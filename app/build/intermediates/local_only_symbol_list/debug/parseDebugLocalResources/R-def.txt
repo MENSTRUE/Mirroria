@@ -1,5 +1,6 @@
 R_DEF: Internal format may change without notice
 local
 drawable ic_mirrora_logo
+drawable ic_person_silhouette
 string app_name
 style Theme.Mirrora

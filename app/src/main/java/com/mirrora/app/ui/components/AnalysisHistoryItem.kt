@@ -1,5 +1,7 @@
 package com.mirrora.app.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mirrora.app.data.model.AnalysisResult
+import com.mirrora.app.ui.theme.MirroraBorder
 import com.mirrora.app.ui.theme.MirroraPrimaryBlue
+import com.mirrora.app.ui.theme.MirroraSurface
 import com.mirrora.app.ui.theme.MirroraTextPrimary
 import com.mirrora.app.ui.theme.MirroraTextSecondary
 
@@ -27,18 +31,24 @@ fun AnalysisHistoryItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val shape = RoundedCornerShape(16.dp)
+
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(vertical = 5.dp)
+            .background(MirroraSurface, shape)
+            .border(1.dp, MirroraBorder, shape)
             .clickable { onClick() }
-            .padding(vertical = 10.dp),
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         FacePlaceholder(
             imageUri = result.imageUri,
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.size(52.dp)
+            modifier = Modifier.size(54.dp)
         )
+
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -52,9 +62,11 @@ fun AnalysisHistoryItem(
             Text(
                 text = result.time,
                 style = MaterialTheme.typography.bodySmall,
-                color = MirroraTextSecondary
+                color = MirroraTextSecondary,
+                modifier = Modifier.padding(top = 2.dp)
             )
         }
+
         Text(
             text = "${result.symmetryPercent}%",
             style = MaterialTheme.typography.bodyLarge,

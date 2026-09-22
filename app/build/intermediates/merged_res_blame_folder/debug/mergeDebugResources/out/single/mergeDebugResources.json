@@ -2,5 +2,9 @@
     {
         "merged": "com.mirrora.app-debug-62:/drawable_ic_mirrora_logo.xml.flat",
         "source": "com.mirrora.app-main-64:/drawable/ic_mirrora_logo.xml"
+    },
+    {
+        "merged": "com.mirrora.app-debug-62:/drawable_ic_person_silhouette.xml.flat",
+        "source": "com.mirrora.app-main-64:/drawable/ic_person_silhouette.xml"
     }
 ]
