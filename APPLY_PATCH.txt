@@ -1,24 +1,27 @@
-MIRRORA UI V2 PATCH
+MIRRORA V3 - INTERACTIVE RESULT PATCH
 
-Cara pakai:
-1. Tutup Android Studio.
-2. Backup project D:\porto\MIRRORA.
-3. Extract isi ZIP ini langsung ke D:\porto\MIRRORA.
-4. Pilih Replace files jika Windows meminta konfirmasi.
-5. Buka Android Studio kembali.
-6. Sync Gradle.
-7. Build > Make Project.
+Isi update:
+- Tombol Refleksi sekarang benar-benar membalik preview foto.
+- Tombol Landmark sekarang menampilkan overlay landmark preview.
+- Tombol Share sekarang membuka Android share sheet dan membagikan ringkasan hasil.
+- Tombol Refleksi/Landmark punya active state yang jelas.
+- Tidak menambah dependency baru.
+- Tidak mengubah Gradle.
 
-Perubahan:
-- Home lebih clean dan icon Settings menuju Profil.
-- CTA utama dibuat white card tipis.
-- History row lebih rapi dan konsisten.
-- Score hasil dibuat card seperti preview.
-- Placeholder wajah diganti silhouette formal.
-- Riwayat menampilkan jumlah hasil dan pencarian lebih fleksibel.
-- .gitignore diperbaiki agar build artifacts tidak ikut commit lagi.
+Cara apply:
+1. Extract ZIP ini ke root project D:\porto\MIRRORA
+2. Replace file ketika diminta.
+3. Sync Gradle.
+4. Build > Make Project.
+5. Run app.
 
-Jika app/build sudah terlanjur tracked:
-git rm -r --cached app/build
+Commit message yang disarankan:
+feat: add interactive reflection, landmark preview, and result sharing
+
+Command:
 git add .
-git commit -m "chore: remove generated Android build artifacts"
+git commit -m "feat: add interactive reflection, landmark preview, and result sharing"
+git push origin main
+
+Catatan:
+Landmark yang ditampilkan saat ini adalah overlay UI preview, bukan hasil model facial landmark sebenarnya.

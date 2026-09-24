@@ -1,17 +1,18 @@
 package com.mirrora.app.ui.screens
 
-import android.widget.Toast
+import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -26,17 +27,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.mirrora.app.data.model.AnalysisResult
-import com.mirrora.app.ui.components.FacePlaceholder
 import com.mirrora.app.ui.components.FacialAreaRow
+import com.mirrora.app.ui.components.ResultImagePreview
+import com.mirrora.app.ui.components.ResultPreviewMode
 import com.mirrora.app.ui.components.SectionHeader
 import com.mirrora.app.ui.components.SymmetryScore
 import com.mirrora.app.ui.theme.MirroraBackground
+import com.mirrora.app.ui.theme.MirroraBlueLight
 import com.mirrora.app.ui.theme.MirroraBorder
 import com.mirrora.app.ui.theme.MirroraPrimaryBlue
 import com.mirrora.app.ui.theme.MirroraTextPrimary
@@ -48,6 +55,7 @@ fun HasilAnalisisScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    var previewMode by rememberSaveable { mutableStateOf(ResultPreviewMode.ORIGINAL) }
 
     Column(
         modifier = Modifier
@@ -67,15 +75,32 @@ fun HasilAnalisisScreen(
                     tint = MirroraTextPrimary
                 )
             }
+
             Text(
                 text = "Hasil analisis",
                 style = MaterialTheme.typography.titleMedium,
                 color = MirroraTextPrimary,
                 modifier = Modifier.weight(1f)
             )
-            IconButton(onClick = {
-                Toast.makeText(context, "Bagikan segera hadir", Toast.LENGTH_SHORT).show()
-            }) {
+
+            IconButton(
+                onClick = {
+                    val shareText = buildString {
+                        appendLine("Hasil analisis MIRRORA")
+                        appendLine("Indeks simetri visual: ${result.symmetryPercent}%")
+                        append(result.supportingText)
+                    }
+
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                    }
+
+                    context.startActivity(
+                        Intent.createChooser(intent, "Bagikan hasil MIRRORA")
+                    )
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Share,
                     contentDescription = "Bagikan",
@@ -91,45 +116,42 @@ fun HasilAnalisisScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
-            Box(
+            ResultImagePreview(
+                imageUri = result.imageUri,
+                mode = previewMode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(260.dp)
-            ) {
-                FacePlaceholder(
-                    imageUri = result.imageUri,
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.fillMaxSize()
-                )
-                Text(
-                    text = "L",
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(12.dp)
-                )
-                Text(
-                    text = "R",
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(12.dp)
-                )
-            }
+            )
 
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
             SymmetryScore(
                 percent = result.symmetryPercent,
                 supportingText = result.supportingText
             )
 
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(modifier = Modifier.fillMaxWidth()) {
+                val reflectionActive = previewMode == ResultPreviewMode.REFLECTION
                 OutlinedButton(
-                    onClick = { Toast.makeText(context, "Refleksi segera hadir", Toast.LENGTH_SHORT).show() },
+                    onClick = {
+                        previewMode = if (reflectionActive) {
+                            ResultPreviewMode.ORIGINAL
+                        } else {
+                            ResultPreviewMode.REFLECTION
+                        }
+                    },
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MirroraPrimaryBlue),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, MirroraBorder)
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (reflectionActive) MirroraBlueLight else Color.Transparent,
+                        contentColor = MirroraPrimaryBlue
+                    ),
+                    border = BorderStroke(
+                        1.dp,
+                        if (reflectionActive) MirroraPrimaryBlue else MirroraBorder
+                    )
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Flip,
@@ -137,16 +159,31 @@ fun HasilAnalisisScreen(
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = "Lihat refleksi",
+                        text = if (reflectionActive) "Asli" else "Refleksi",
                         modifier = Modifier.padding(start = 6.dp)
                     )
                 }
-                androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(start = 12.dp))
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                val landmarkActive = previewMode == ResultPreviewMode.LANDMARK
                 OutlinedButton(
-                    onClick = { Toast.makeText(context, "Landmark segera hadir", Toast.LENGTH_SHORT).show() },
+                    onClick = {
+                        previewMode = if (landmarkActive) {
+                            ResultPreviewMode.ORIGINAL
+                        } else {
+                            ResultPreviewMode.LANDMARK
+                        }
+                    },
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MirroraPrimaryBlue),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, MirroraBorder)
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (landmarkActive) MirroraBlueLight else Color.Transparent,
+                        contentColor = MirroraPrimaryBlue
+                    ),
+                    border = BorderStroke(
+                        1.dp,
+                        if (landmarkActive) MirroraPrimaryBlue else MirroraBorder
+                    )
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.GridOn,
@@ -154,20 +191,24 @@ fun HasilAnalisisScreen(
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = "Landmark",
+                        text = if (landmarkActive) "Asli" else "Landmark",
                         modifier = Modifier.padding(start = 6.dp)
                     )
                 }
             }
 
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 28.dp))
+            Spacer(modifier = Modifier.height(28.dp))
+
             SectionHeader(title = "Detail area wajah")
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 4.dp))
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             result.facialAreas.forEach { area ->
                 FacialAreaRow(type = area.type, percent = area.percent)
             }
 
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
             Row(modifier = Modifier.padding(bottom = 24.dp)) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
