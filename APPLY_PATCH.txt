@@ -1,27 +1,11 @@
-MIRRORA V3 - INTERACTIVE RESULT PATCH
+MIRRORA V4 - DASAR ANALISIS
 
-Isi update:
-- Tombol Refleksi sekarang benar-benar membalik preview foto.
-- Tombol Landmark sekarang menampilkan overlay landmark preview.
-- Tombol Share sekarang membuka Android share sheet dan membagikan ringkasan hasil.
-- Tombol Refleksi/Landmark punya active state yang jelas.
-- Tidak menambah dependency baru.
-- Tidak mengubah Gradle.
+Extract ke D:\porto\MIRRORA dan replace file.
+Lalu Sync Gradle dan Build > Make Project.
 
-Cara apply:
-1. Extract ZIP ini ke root project D:\porto\MIRRORA
-2. Replace file ketika diminta.
-3. Sync Gradle.
-4. Build > Make Project.
-5. Run app.
+Akses screen baru:
+- Hasil Analisis -> Analisis ini berdasarkan apa?
+- Profil -> Tentang -> Dasar analisis MIRRORA
 
-Commit message yang disarankan:
-feat: add interactive reflection, landmark preview, and result sharing
-
-Command:
-git add .
-git commit -m "feat: add interactive reflection, landmark preview, and result sharing"
-git push origin main
-
-Catatan:
-Landmark yang ditampilkan saat ini adalah overlay UI preview, bukan hasil model facial landmark sebenarnya.
+Commit:
+feat: add analysis basis and methodology screen

@@ -39,7 +39,8 @@ import com.mirrora.app.ui.theme.MirroraTextSecondary
 
 @Composable
 fun ProfilScreen(
-    onDeleteHistory: () -> Unit
+    onDeleteHistory: () -> Unit,
+    onAnalysisBasisClick: () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -56,7 +57,6 @@ fun ProfilScreen(
             style = MaterialTheme.typography.titleLarge,
             color = MirroraTextPrimary
         )
-
         androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 20.dp))
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -97,6 +97,11 @@ fun ProfilScreen(
 
         androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(top = 12.dp))
         SectionHeader(title = "Tentang")
+        SettingsRow(
+            icon = Icons.Outlined.Info,
+            label = "Dasar analisis MIRRORA",
+            onClick = onAnalysisBasisClick
+        )
         SettingsRow(icon = Icons.Outlined.Info, label = "Tentang MIRRORA", onClick = {})
         SettingsRow(icon = Icons.Outlined.Lock, label = "Privasi", onClick = {})
         SettingsRow(

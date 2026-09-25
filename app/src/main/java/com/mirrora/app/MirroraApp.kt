@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mirrora.app.navigation.MirroraDestinations
 import com.mirrora.app.ui.components.AppBottomNavigation
 import com.mirrora.app.ui.screens.BerandaScreen
+import com.mirrora.app.ui.screens.DasarAnalisisScreen
 import com.mirrora.app.ui.screens.HasilAnalisisScreen
 import com.mirrora.app.ui.screens.ProfilScreen
 import com.mirrora.app.ui.screens.RiwayatScreen
@@ -57,13 +58,9 @@ fun MirroraApp() {
                     recentResults = results,
                     onStartScan = { navController.navigate(MirroraDestinations.SCAN) },
                     onSeeAllHistory = { navController.navigate(MirroraDestinations.RIWAYAT) },
-                    onResultClick = { id ->
-                        navController.navigate(MirroraDestinations.hasilRoute(id))
-                    },
+                    onResultClick = { id -> navController.navigate(MirroraDestinations.hasilRoute(id)) },
                     onSettingsClick = {
-                        navController.navigate(MirroraDestinations.PROFIL) {
-                            launchSingleTop = true
-                        }
+                        navController.navigate(MirroraDestinations.PROFIL) { launchSingleTop = true }
                     }
                 )
             }
@@ -86,7 +83,8 @@ fun MirroraApp() {
                 if (result != null) {
                     HasilAnalisisScreen(
                         result = result,
-                        onBack = { navController.popBackStack() }
+                        onBack = { navController.popBackStack() },
+                        onExplainAnalysis = { navController.navigate(MirroraDestinations.DASAR_ANALISIS) }
                     )
                 }
             }
@@ -94,16 +92,19 @@ fun MirroraApp() {
             composable(MirroraDestinations.RIWAYAT) {
                 RiwayatScreen(
                     results = results,
-                    onResultClick = { id ->
-                        navController.navigate(MirroraDestinations.hasilRoute(id))
-                    }
+                    onResultClick = { id -> navController.navigate(MirroraDestinations.hasilRoute(id)) }
                 )
             }
 
             composable(MirroraDestinations.PROFIL) {
                 ProfilScreen(
-                    onDeleteHistory = { viewModel.deleteAllHistory() }
+                    onDeleteHistory = { viewModel.deleteAllHistory() },
+                    onAnalysisBasisClick = { navController.navigate(MirroraDestinations.DASAR_ANALISIS) }
                 )
+            }
+
+            composable(MirroraDestinations.DASAR_ANALISIS) {
+                DasarAnalisisScreen(onBack = { navController.popBackStack() })
             }
         }
     }
